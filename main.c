@@ -3,8 +3,10 @@
 #endif //UNICODE
 
 #include <windows.h>
+#include "file_reader.h"
 
 LRESULT CALLBACK WindowProc(HWND window_handle, UINT u_message, WPARAM w_param, LPARAM l_param);
+void read_image(char* path);
 
 int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* arguments, int display_flag)
 {
@@ -40,6 +42,8 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 
 	//message loop with OS
 	MSG message = { 0 };
+
+	read_image("test_image.bmp");
 
 	while (GetMessage(&message, NULL, 0, 0))
 	{
@@ -78,4 +82,12 @@ LRESULT CALLBACK WindowProc(HWND window_handle, UINT u_message, WPARAM w_param, 
 	}
 
 	return DefWindowProc(window_handle, u_message, w_param, l_param);
+}
+
+void read_image(char* path)
+{
+	header image_header = { 0 };
+
+	if (!bitmap_header(path, &image_header))
+		OutputDebugString(L"---Error opening file---");
 }
