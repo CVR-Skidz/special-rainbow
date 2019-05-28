@@ -15,15 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.c">
+    <ClCompile Include="file_reader.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="file_reader.c">
+    <ClCompile Include="entry.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file_reader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="entry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

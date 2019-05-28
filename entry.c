@@ -2,8 +2,9 @@
 #define UNICODE
 #endif //UNICODE
 
-#include <windows.h>
-#include "file_reader.h"
+#include "entry.h"
+
+program_debug debug;
 
 LRESULT CALLBACK WindowProc(HWND window_handle, UINT u_message, WPARAM w_param, LPARAM l_param);
 void read_image(char* path);
@@ -27,7 +28,7 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 		WS_OVERLAPPEDWINDOW,			//window style
 
 		//size and coords
-		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+		CW_USEDEFAULT, CW_USEDEFAULT, 500, 500,
 
 		NULL,							//parent
 		NULL,							//menu
@@ -39,6 +40,9 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 		return 0;
 
 	ShowWindow(window_handle, display_flag);
+
+	//set debug points
+	debug_init(debug);
 
 	//message loop with OS
 	MSG message = { 0 };
@@ -88,5 +92,16 @@ void read_image(char* path)
 	header image_header = { 0 };
 
 	if (!bitmap_header(path, &image_header))
-		OutputDebugString(L"---Error opening file---");
+	{
+		debug.set_output(&debug, L"Error Opening File\n");
+		WriteConsole(debug.console_handle, debug.output_buffer, debug.output_length, debug.output_result, 0);
+	}
+	else
+	{
+		wchar_t file_header_buffer[128];
+
+		wsprintf(file_header_buffer, L"size: %d bytes \noffset: %d bytes\n", image_header.size, image_header.offset);
+		debug.set_output(&debug, file_header_buffer);
+		WriteConsole(debug.console_handle, debug.output_buffer, debug.output_length, debug.output_result, 0);
+	}
 }

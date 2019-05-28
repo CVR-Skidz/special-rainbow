@@ -144,9 +144,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="file_reader.c" />
-    <ClCompile Include="main.c" />
+    <ClCompile Include="entry.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="entry.h" />
     <ClInclude Include="file_reader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
