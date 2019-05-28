@@ -90,6 +90,7 @@ LRESULT CALLBACK WindowProc(HWND window_handle, UINT u_message, WPARAM w_param, 
 void read_image(char* path)
 {
 	header image_header = { 0 };
+	info_header image_info = { 0 };
 
 	if (!bitmap_header(path, &image_header))
 	{
@@ -98,10 +99,18 @@ void read_image(char* path)
 	}
 	else
 	{
-		wchar_t file_header_buffer[128];
+		debug.set_output(&debug, image_header.summary);
+		WriteConsole(debug.console_handle, debug.output_buffer, debug.output_length, debug.output_result, 0);
+	}
 
-		wsprintf(file_header_buffer, L"size: %d bytes \noffset: %d bytes\n", image_header.size, image_header.offset);
-		debug.set_output(&debug, file_header_buffer);
+	if (!bitmap_info(path, &image_info))
+	{
+		debug.set_output(&debug, L"Error Opening File\n");
+		WriteConsole(debug.console_handle, debug.output_buffer, debug.output_length, debug.output_result, 0);
+	}
+	else
+	{
+		debug.set_output(&debug, image_info.summary);
 		WriteConsole(debug.console_handle, debug.output_buffer, debug.output_length, debug.output_result, 0);
 	}
 }

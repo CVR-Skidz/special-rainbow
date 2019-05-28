@@ -1,10 +1,15 @@
 ﻿  entry.c
-G:\Documents\Programming\C\special-rainbow\file_reader.h(2,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
-G:\Documents\Programming\C\special-rainbow\entry.c(97,99): warning C4047:  'function': 'LPDWORD' differs in levels of indirection from 'int'
-G:\Documents\Programming\C\special-rainbow\entry.c(97,99): warning C4024:  'WriteConsoleW': different types for formal and actual parameter 4
-G:\Documents\Programming\C\special-rainbow\entry.c(105,99): warning C4047:  'function': 'LPDWORD' differs in levels of indirection from 'int'
+G:\Documents\Programming\C\special-rainbow\entry.c(98,99): warning C4047:  'function': 'LPDWORD' differs in levels of indirection from 'int'
+G:\Documents\Programming\C\special-rainbow\entry.c(98,99): warning C4024:  'WriteConsoleW': different types for formal and actual parameter 4
+G:\Documents\Programming\C\special-rainbow\entry.c(103,99): warning C4047:  'function': 'LPDWORD' differs in levels of indirection from 'int'
+G:\Documents\Programming\C\special-rainbow\entry.c(103,99): warning C4024:  'WriteConsoleW': different types for formal and actual parameter 4
+G:\Documents\Programming\C\special-rainbow\entry.c(109,99): warning C4047:  'function': 'LPDWORD' differs in levels of indirection from 'int'
+G:\Documents\Programming\C\special-rainbow\entry.c(109,99): warning C4024:  'WriteConsoleW': different types for formal and actual parameter 4
+G:\Documents\Programming\C\special-rainbow\entry.c(114,99): warning C4047:  'function': 'LPDWORD' differs in levels of indirection from 'int'
   file_reader.c
-G:\Documents\Programming\C\special-rainbow\entry.c(105,99): warning C4024:  'WriteConsoleW': different types for formal and actual parameter 4
+G:\Documents\Programming\C\special-rainbow\entry.c(114,99): warning C4024:  'WriteConsoleW': different types for formal and actual parameter 4
+G:\Documents\Programming\C\special-rainbow\file_reader.c(56,26): warning C4133:  'function': incompatible types - from 'info_header *' to 'header *'
   Generating Code...
-G:\Documents\Programming\C\special-rainbow\file_reader.h(2,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+G:\Documents\Programming\C\special-rainbow\file_reader.c(80,1): warning C4028:  formal parameter 1 different from declaration
+G:\Documents\Programming\C\special-rainbow\file_reader.c(80,1): warning C4028: G:\Documents\Programming\C\special-rainbow\file_reader.c(103) : warning C4715: 'integer_digits': not all control paths return a value
   special-rainbow.vcxproj -> G:\Documents\Programming\C\special-rainbow\x64\Debug\special-rainbow.exe
