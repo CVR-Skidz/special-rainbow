@@ -23,13 +23,37 @@ typedef enum t_compression_type
 	FOUR_BIT_RLE
 }compression_type;
 
+typedef enum t_file_status
+{
+	NOERR,
+	READ_PATH_ERROR,
+	WRITE_PATH_ERROR
+}file_status;
+
 typedef struct t_info_header
 {
-	int width, height, total, bits_per_pixel;
+	int width, height, total;
+	short bits_per_pixel;
 	compression_type compression;
 
 	wchar_t* summary;
 }info_header;
+
+typedef struct t_pixel
+{
+	int r, g, b, a;
+}pixel;
+
+typedef struct t_image
+{
+	header header;
+	info_header info;
+	file_status status;
+	pixel** pixels;
+}image;
+
+//image creation functions
+image bitmap(char* path);
 
 //bitmap file functions
 int bitmap_header(char* path, header* output);
@@ -37,5 +61,5 @@ int bitmap_info(char* path, info_header* output);
 
 //data formatting functions
 void set_header_summary(header* file_header);
-void set_info_summary(header* file_header);
+void set_info_summary(info_header* file_header);
 int integer_digits(int value);

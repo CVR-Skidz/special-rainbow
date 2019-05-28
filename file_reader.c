@@ -1,5 +1,19 @@
 #include "file_reader.h"
 
+image bitmap(char* path)
+{
+	header image_header;
+	info_header image_info;
+
+	if (!bitmap_header(path, &image_header))
+		return (image) { 0, 0, READ_PATH_ERROR };
+
+	if (!bitmap_info(path, &image_info))
+		return (image) { 0, 0, READ_PATH_ERROR };
+
+	return (image) { image_header, image_info, NOERR };
+}
+
 int bitmap_header(char* path, header* output)
 {
 	//open file at path
@@ -50,7 +64,7 @@ int bitmap_info(char* path, info_header* output)
 		//skip planes
 		FILE_OFFSET_16(image_file);
 
-		fread(&output->bits_per_pixel, sizeof(char) * 2, 1, image_file);
+		fread(&output->bits_per_pixel, sizeof(short), 1, image_file);
 		fread(&output->compression, sizeof(int), 1, image_file);
 
 		set_info_summary(output);
@@ -85,7 +99,7 @@ void set_info_summary(info_header* file_header)
 	size_t colors_length = integer_digits(file_header->bits_per_pixel);
 
 	//set size of buffer
-	wchar_t* format = L"resolution:\t%d px x %d px\nbits per channel:\t%d\ncompression type:\t%d";
+	wchar_t* format = L"resolution:\t%d px x %d px\nbits per channel:\t%d\ncompression type:\t%d\n";
 	file_header->summary = malloc(wcslen(format) + compression_length + width_length + height_length + colors_length);
 
 	//set summary
@@ -97,7 +111,7 @@ int integer_digits(int value)
 {
 	for (int index = 6; index >= 0; --index)
 	{
-		if ((value - (int)pow(10, index)) > 0)
+		if ((value - (int)pow(10, index)) >= 0)
 			return index + 1;
 	}
 }
