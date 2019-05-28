@@ -1,6 +1,3 @@
-﻿  file_reader.c
-  main.c
-C:\Users\Skidz\Documents\C\special-rainbow\file_reader.h(2,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
-  Generating Code...
+﻿  main.c
 C:\Users\Skidz\Documents\C\special-rainbow\file_reader.h(2,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
   special-rainbow.vcxproj -> C:\Users\Skidz\Documents\C\special-rainbow\x64\Debug\special-rainbow.exe

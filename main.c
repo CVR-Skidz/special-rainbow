@@ -27,7 +27,7 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 		WS_OVERLAPPEDWINDOW,			//window style
 
 		//size and coords
-		CW_USEDEFAULT, CW_USEDEFAULT, 500, 500,
+		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
 		NULL,							//parent
 		NULL,							//menu
@@ -53,7 +53,6 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 
 	return 0;
 }
-
 
 /*
 * Function: WindowProc
