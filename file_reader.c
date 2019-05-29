@@ -11,7 +11,7 @@ image bitmap(char* path)
 	if (!bitmap_info(path, &image_info))
 		return (image) { 0, 0, READ_PATH_ERROR };
 	
-	char* pixel_info = malloc(image_info.total);
+	unsigned char* pixel_info = malloc(image_info.total*BYTE_SIZE_B);
 	map_pixels(path, &image_header, pixel_info, &image_info);
 
 	return (image) { image_header, image_info, NOERR };
@@ -139,17 +139,22 @@ int map_pixels(char* path, header* image_header, char* raw_buffer, info_header* 
 		ftell(image_file);
 		fseek(image_file, image_header->offset, SEEK_CUR);
 
-		for (int pixel = 0; pixel < image_info->total; pixel+=2)
+		float pixels_per_byte = BYTE_SIZE_B / image_info->bits_per_pixel;
+
+		for (int pixel = 0; pixel < image_info->total*pixels_per_byte; pixel += pixels_per_byte)
 		{
-			//TODO fix loop to loop 1 byte at a time - storing two pixels color
-			for (int colour = pixel * CHANNELS; colour < (CHANNELS*2) * (pixel + 1); ++colour)
+			unsigned char byte_stream_buffer = 0;
+			fread(&byte_stream_buffer, 1, 1, image_file);
+
+			for (int color = pixel; color < pixels_per_byte + pixel; ++color)
 			{
-				//TODO split hexadecimal value of 1 byte into two
-				//then convert that to color
-				raw_buffer[colour] = 0;
-				fread(&raw_buffer[colour], image_info->bits_per_pixel / CHANNELS, 1, image_file);
+				//set value to byte containing all pixel colors
+				raw_buffer[color] = byte_stream_buffer;
+				//push wrong pixel data out of value
+				raw_buffer[color] <<= (BYTE_SIZE_B / (int)pixels_per_byte) * (color - pixel);
+				//revert original position of value
+				(unsigned char)raw_buffer[color] >>= image_info->bits_per_pixel;
 			}
-				
 		}
 	}
 

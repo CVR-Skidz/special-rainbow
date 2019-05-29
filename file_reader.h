@@ -8,6 +8,7 @@
 #define FILE_OFFSET_16(stream) {ftell(stream); fseek(stream, 2, SEEK_CUR);}
 #define FILE_OFFSET_32(stream) {ftell(stream); fseek(stream, 4, SEEK_CUR);}
 #define CHANNELS 4
+#define BYTE_SIZE_B 8
 
 typedef struct t_header
 {

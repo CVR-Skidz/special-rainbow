@@ -1,4 +1,5 @@
 ﻿  file_reader.c
-  G:\Documents\Programming\C\special-rainbow\file_reader.c(37) : warning C4716: 'pixel_array': must return a value
-  G:\Documents\Programming\C\special-rainbow\file_reader.c(193) : warning C4715: 'integer_digits': not all control paths return a value
+G:\Documents\Programming\C\special-rainbow\file_reader.c(144,90): warning C4244:  '+=': conversion from 'float' to 'int', possible loss of data
+G:\Documents\Programming\C\special-rainbow\file_reader.c(142,1): warning C4244:  'initializing': conversion from 'int' to 'float', possible loss of data
+G:\Documents\Programming\C\special-rainbow\file_reader.c(142,1): warning C4244: G:\Documents\Programming\C\special-rainbow\file_reader.c(205) : warning C4715: 'integer_digits': not all control paths return a value
   special-rainbow.vcxproj -> G:\Documents\Programming\C\special-rainbow\x64\Debug\special-rainbow.exe
