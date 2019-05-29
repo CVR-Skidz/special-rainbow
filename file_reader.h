@@ -30,6 +30,14 @@ typedef enum t_file_status
 	WRITE_PATH_ERROR
 }file_status;
 
+typedef enum t_color
+{
+	RED,
+	GREEN,
+	BLUE,
+	ALPHA
+}color;
+
 typedef struct t_info_header
 {
 	int width, height, total;
@@ -42,6 +50,7 @@ typedef struct t_info_header
 typedef struct t_pixel
 {
 	int r, g, b, a;
+	int x, y;
 }pixel;
 
 typedef struct t_image
@@ -54,10 +63,13 @@ typedef struct t_image
 
 //image creation functions
 image bitmap(char* path);
+//pixel** pixel_array(int* pixel_info, info_header* header);
+//void split_channels(pixel* pixel, int pixel_row, int column_offset, int* pixel_info);
 
 //bitmap file functions
 int bitmap_header(char* path, header* output);
 int bitmap_info(char* path, info_header* output);
+int map_pixels(char* path, header* image_header, char* raw_data, info_header* image_info);
 
 //data formatting functions
 void set_header_summary(header* file_header);
