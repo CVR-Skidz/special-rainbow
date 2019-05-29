@@ -12,56 +12,35 @@ image bitmap(char* path)
 		return (image) { 0, 0, READ_PATH_ERROR };
 	
 	unsigned char* pixel_info = malloc(image_info.total*BYTE_SIZE_B);
+	color* color_table = malloc((int)powf(image_info.bits_per_pixel, 2) * CHANNELS);
+
+	map_color_table(path, color_table, &image_info);
 	map_pixels(path, &image_header, pixel_info, &image_info);
 
-	return (image) { image_header, image_info, NOERR };
+	return (image) { image_header, image_info, NOERR, pixel_array(pixel_info, &image_info, color_table), color_table};
 }
 
-/*
-pixel** pixel_array(int* pixel_info, info_header* header)
+pixel** pixel_array(unsigned char* pixel_info, info_header* header, color* color_table)
 {
-	pixel** image_pixels = malloc(header->total*sizeof(pixel));
+	pixel** image_pixels = malloc(header->total * sizeof(pixel));
+
+	//support for upto 16 bit color
+	int end = BYTE_SIZE_B * 2 * header->width - 1;
+	int padding = BYTE_SIZE_B * 2 - header->width;
 
 	for (int r_pixel = 0; r_pixel < header->height; ++r_pixel)
 	{
-		for(int c_pixel = 0; c_pixel < header->width; ++c_pixel)
+		image_pixels[r_pixel] = malloc(sizeof(pixel)*header->width);
+		for (int c_pixel = 0; c_pixel < header->width; ++c_pixel)
 		{
-			pixel pixel_buffer;
-			pixel_buffer.x = c_pixel + 1;
-			pixel_buffer.y = r_pixel + 1;
-
-			split_channels(&pixel_buffer, c_pixel, r_pixel * header->width, pixel_info);
-
-			image_pixels[r_pixel][c_pixel] = pixel_buffer;
+			int table_index = pixel_info[end - r_pixel * BYTE_SIZE_B * 2 - padding - c_pixel];
+			image_pixels[r_pixel][c_pixel].r = color_table[table_index].r;
+			image_pixels[r_pixel][c_pixel].g = color_table[table_index].g;
+			image_pixels[r_pixel][c_pixel].b = color_table[table_index].b;
+			image_pixels[r_pixel][c_pixel].a = 1;
 		}
 	}
 }
-*/
-
-/*
-void split_channels(pixel* pixel, int pixel_row, int column_offset, int* pixel_info)
-{
-	for (int color_channel = column_offset + pixel_row * CHANNELS; color_channel < CHANNELS; ++color_channel)
-	{
-		switch (color_channel)
-		{
-		case RED:
-			pixel->r = pixel_info[color_channel] * 0xff;
-			break;
-		case GREEN:
-			pixel->g = pixel_info[color_channel] * 0xff;
-			break;
-		case BLUE:
-			pixel->b = pixel_info[color_channel] * 0xff;
-			break;
-		case ALPHA:
-			pixel->a = pixel_info[color_channel] * 0xff;
-			break;
-		}
-	}
-
-}
-*/
 
 int bitmap_header(char* path, header* output)
 {
@@ -155,6 +134,33 @@ int map_pixels(char* path, header* image_header, char* raw_buffer, info_header* 
 				//revert original position of value
 				(unsigned char)raw_buffer[color] >>= image_info->bits_per_pixel;
 			}
+		}
+	}
+
+	fclose(image_file);
+
+	return 1;
+}
+
+int map_color_table(char* path, color* table, info_header* image_info)
+{
+	FILE* image_file;
+
+	if (fopen_s(&image_file, path, "rb"))
+		return 0;
+
+	if (image_file)
+	{
+		//position stream to color data
+		ftell(image_file);
+		fseek(image_file, 54, SEEK_CUR);
+
+		for (int color = 0; color < (int)powf(image_info->bits_per_pixel, 2); ++color)
+		{
+			fread(&table[color].r, 1, 1, image_file);
+			fread(&table[color].g, 1, 1, image_file);
+			fread(&table[color].b, 1, 1, image_file);
+			fread(&table[color].reserved, 1, 1, image_file);
 		}
 	}
 
