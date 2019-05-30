@@ -14,16 +14,18 @@ image bitmap(char* path)
 	unsigned char* pixel_info = malloc(image_info.total*BYTE_SIZE_B);
 	color* color_table = malloc((int)powf(image_info.bits_per_pixel, 2) * CHANNELS);
 
+	//pixels of image
+	pixel** image_pixels = malloc(image_info.total * sizeof(pixel));
+
 	map_color_table(path, color_table, &image_info);
 	map_pixels(path, &image_header, pixel_info, &image_info);
+	pixel_array(pixel_info, &image_info, color_table, image_pixels);
 
-	return (image) { image_header, image_info, NOERR, pixel_array(pixel_info, &image_info, color_table), color_table};
+	return (image) { image_header, image_info, NOERR, image_pixels, color_table};
 }
 
-pixel** pixel_array(unsigned char* pixel_info, info_header* header, color* color_table)
+int pixel_array(unsigned char* pixel_info, info_header* header, color* color_table,pixel** image_pixels)
 {
-	pixel** image_pixels = malloc(header->total * sizeof(pixel));
-
 	//support for upto 16 bit color
 	int end = BYTE_SIZE_B * 2 * header->width - 1;
 	int padding = BYTE_SIZE_B * 2 - header->width;
@@ -38,8 +40,13 @@ pixel** pixel_array(unsigned char* pixel_info, info_header* header, color* color
 			image_pixels[r_pixel][c_pixel].g = color_table[table_index].g;
 			image_pixels[r_pixel][c_pixel].b = color_table[table_index].b;
 			image_pixels[r_pixel][c_pixel].a = 1;
+			image_pixels[r_pixel][c_pixel].x = c_pixel+1;
+			image_pixels[r_pixel][c_pixel].y = r_pixel+1;
+			
 		}
 	}
+
+	return 1;
 }
 
 int bitmap_header(char* path, header* output)
@@ -157,9 +164,9 @@ int map_color_table(char* path, color* table, info_header* image_info)
 
 		for (int color = 0; color < (int)powf(image_info->bits_per_pixel, 2); ++color)
 		{
-			fread(&table[color].r, 1, 1, image_file);
-			fread(&table[color].g, 1, 1, image_file);
 			fread(&table[color].b, 1, 1, image_file);
+			fread(&table[color].g, 1, 1, image_file);
+			fread(&table[color].r, 1, 1, image_file);
 			fread(&table[color].reserved, 1, 1, image_file);
 		}
 	}

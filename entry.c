@@ -21,7 +21,7 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 	RegisterClass(&window_class);					//apply class properties
 
 	//create window
-	HWND window_handle = CreateWindowEx(						//handle for window
+	HWND window_handle = CreateWindowEx(			//handle for window
 		0,								//optional styles
 		window_class.lpszClassName,		//window class
 		L"Special Rainbow",				//window title
@@ -103,5 +103,13 @@ void read_image(char* path)
 		
 		debug.set_output(&debug, bitmap_image.info.summary);
 		debug_log(debug);
+
+		/*for (int r_pixel = 0; r_pixel < bitmap_image.info.height; ++r_pixel)
+		{
+			for (int c_pixel = 0; c_pixel < bitmap_image.info.width; ++c_pixel)
+			{
+				SetPixel()
+			}
+		}*/
 	}
 }

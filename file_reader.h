@@ -62,7 +62,7 @@ typedef struct t_image
 
 //image creation functions
 image bitmap(char* path);
-pixel** pixel_array(unsigned char* pixel_info, info_header* header, color* color_table);
+int pixel_array(unsigned char* pixel_info, info_header* header, color* color_table, pixel** image_pixels);
 
 //bitmap file functions
 int bitmap_header(char* path, header* output);
