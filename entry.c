@@ -1,13 +1,9 @@
 #ifndef UNICODE //UNICODE
 #define UNICODE
 #endif //UNICODE
-
 #include "entry.h"
 
-program_debug debug;
-
-LRESULT CALLBACK WindowProc(HWND window_handle, UINT u_message, WPARAM w_param, LPARAM l_param);
-void read_image(char* path);
+image bitmap_image;
 
 int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* arguments, int display_flag)
 {
@@ -47,7 +43,7 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 	//message loop with OS
 	MSG message = { 0 };
 
-	read_image("test_image.bmp");
+	bitmap_image = bitmap("test_image.bmp");
 
 	while (GetMessage(&message, NULL, 0, 0))
 	{
@@ -78,6 +74,7 @@ LRESULT CALLBACK WindowProc(HWND window_handle, UINT u_message, WPARAM w_param, 
 			HDC hdc = BeginPaint(window_handle, &ps);
 
 			FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+			draw_image(hdc);
 
 			EndPaint(window_handle, &ps);
 		}
@@ -87,29 +84,14 @@ LRESULT CALLBACK WindowProc(HWND window_handle, UINT u_message, WPARAM w_param, 
 	return DefWindowProc(window_handle, u_message, w_param, l_param);
 }
 
-void read_image(char* path)
+void draw_image(HDC device_context)
 {
-	image bitmap_image = bitmap(path);
-
-	if (bitmap_image.status)
+	for (int r_pixel = 0; r_pixel < bitmap_image.info.height; ++r_pixel)
 	{
-		debug.set_output(&debug, L"Error Opening File\n");
-		debug_log(debug);
-	}
-	else
-	{
-		debug.set_output(&debug, bitmap_image.header.summary);
-		debug_log(debug);
-		
-		debug.set_output(&debug, bitmap_image.info.summary);
-		debug_log(debug);
-
-		/*for (int r_pixel = 0; r_pixel < bitmap_image.info.height; ++r_pixel)
+		for (int c_pixel = 0; c_pixel < bitmap_image.info.width; ++c_pixel)
 		{
-			for (int c_pixel = 0; c_pixel < bitmap_image.info.width; ++c_pixel)
-			{
-				SetPixel()
-			}
-		}*/
+				pixel curr_pixel = bitmap_image.pixels[r_pixel][c_pixel];
+				SetPixel(device_context, curr_pixel.x, curr_pixel.y, RGB(curr_pixel.r, curr_pixel.g, curr_pixel.b));
+		}
 	}
 }

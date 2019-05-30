@@ -6,11 +6,19 @@ image bitmap(char* path)
 	info_header image_info;
 
 	if (!bitmap_header(path, &image_header))
+	{
+		debug.set_output(&debug, L"Error Opening File\n");
+		debug_log(debug);
 		return (image) { 0, 0, READ_PATH_ERROR };
-
+	}
+		
 	if (!bitmap_info(path, &image_info))
+	{
+		debug.set_output(&debug, L"Error Opening File\n");
+		debug_log(debug);
 		return (image) { 0, 0, READ_PATH_ERROR };
-	
+	}
+		
 	unsigned char* pixel_info = malloc(image_info.total*BYTE_SIZE_B);
 	color* color_table = malloc((int)powf(image_info.bits_per_pixel, 2) * CHANNELS);
 
@@ -35,6 +43,7 @@ int pixel_array(unsigned char* pixel_info, info_header* header, color* color_tab
 		image_pixels[r_pixel] = malloc(sizeof(pixel)*header->width);
 		for (int c_pixel = 0; c_pixel < header->width; ++c_pixel)
 		{
+			//TODO rework end of data and method of moving index backwards
 			int table_index = pixel_info[end - r_pixel * BYTE_SIZE_B * 2 - padding - c_pixel];
 			image_pixels[r_pixel][c_pixel].r = color_table[table_index].r;
 			image_pixels[r_pixel][c_pixel].g = color_table[table_index].g;
@@ -42,7 +51,6 @@ int pixel_array(unsigned char* pixel_info, info_header* header, color* color_tab
 			image_pixels[r_pixel][c_pixel].a = 1;
 			image_pixels[r_pixel][c_pixel].x = c_pixel+1;
 			image_pixels[r_pixel][c_pixel].y = r_pixel+1;
-			
 		}
 	}
 

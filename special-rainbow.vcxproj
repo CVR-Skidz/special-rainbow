@@ -143,10 +143,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="debug.c" />
     <ClCompile Include="file_reader.c" />
     <ClCompile Include="entry.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="debug.h" />
     <ClInclude Include="entry.h" />
     <ClInclude Include="file_reader.h" />
   </ItemGroup>
