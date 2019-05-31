@@ -7,20 +7,26 @@ image bitmap(char* path)
 
 	if (!bitmap_header(path, &image_header))
 	{
+		#ifdef DEBUG
 		debug.set_output(&debug, L"Error Opening File\n");
 		debug_log(debug);
+		#endif
+
 		return (image) { 0, 0, READ_PATH_ERROR };
 	}
 		
 	if (!bitmap_info(path, &image_info))
 	{
+		#ifdef DEBUG
 		debug.set_output(&debug, L"Error Opening File\n");
 		debug_log(debug);
+		#endif
+
 		return (image) { 0, 0, READ_PATH_ERROR };
 	}
 		
 	unsigned char* pixel_info = malloc(image_info.total*BYTE_SIZE_B);
-	color* color_table = malloc((int)powf(image_info.bits_per_pixel, 2) * CHANNELS);
+	color* color_table = malloc(powf(image_info.bits_per_pixel, 2) * CHANNELS);
 
 	//pixels of image
 	pixel** image_pixels = malloc(image_info.total * sizeof(pixel));
@@ -35,8 +41,9 @@ image bitmap(char* path)
 int pixel_array(unsigned char* pixel_info, info_header* header, color* color_table,pixel** image_pixels)
 {
 	//support for upto 16 bit color
-	int end = BYTE_SIZE_B * 2 * header->width - 1;
-	int padding = BYTE_SIZE_B * 2 - header->width;
+	int bytes_per_scan_line = header->width / (BYTE_SIZE_B / header->bits_per_pixel);
+	int padding = (NIBBLE_SIZE_B - (bytes_per_scan_line % NIBBLE_SIZE_B)) * BYTE_SIZE_B/header->bits_per_pixel;
+	int end = (header->width + padding) * header->height - 1;
 
 	for (int r_pixel = 0; r_pixel < header->height; ++r_pixel)
 	{
@@ -44,7 +51,7 @@ int pixel_array(unsigned char* pixel_info, info_header* header, color* color_tab
 		for (int c_pixel = 0; c_pixel < header->width; ++c_pixel)
 		{
 			//TODO rework end of data and method of moving index backwards
-			int table_index = pixel_info[end - r_pixel * BYTE_SIZE_B * 2 - padding - c_pixel];
+			int table_index = pixel_info[end - (header->width + padding)*(r_pixel+1) + (c_pixel+1)];
 			image_pixels[r_pixel][c_pixel].r = color_table[table_index].r;
 			image_pixels[r_pixel][c_pixel].g = color_table[table_index].g;
 			image_pixels[r_pixel][c_pixel].b = color_table[table_index].b;
@@ -177,9 +184,10 @@ int map_color_table(char* path, color* table, info_header* image_info)
 			fread(&table[color].r, 1, 1, image_file);
 			fread(&table[color].reserved, 1, 1, image_file);
 		}
-	}
 
-	fclose(image_file);
+		fclose(image_file);
+	}
+	
 
 	return 1;
 }

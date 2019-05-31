@@ -37,13 +37,15 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 
 	ShowWindow(window_handle, display_flag);
 
+	#ifdef DEBUG
 	//set debug points
 	debug_init(debug);
+	#endif
 
 	//message loop with OS
 	MSG message = { 0 };
 
-	bitmap_image = bitmap("test_image.bmp");
+	bitmap_image = bitmap("test_image_small.bmp");
 
 	while (GetMessage(&message, NULL, 0, 0))
 	{
