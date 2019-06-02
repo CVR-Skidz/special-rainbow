@@ -25,8 +25,8 @@ image bitmap(char* path)
 		return (image) { 0, 0, READ_PATH_ERROR };
 	}
 		
-	unsigned char* pixel_info = malloc(image_info.total*BYTE_SIZE_B);
-	color* color_table = malloc(powf(image_info.bits_per_pixel, 2) * CHANNELS);
+	unsigned char* pixel_info = malloc(image_info.padded_total);
+	color* color_table = malloc((size_t)image_info.colors * CHANNELS);
 
 	//pixels of image
 	pixel** image_pixels = malloc(image_info.total * sizeof(pixel));
@@ -41,9 +41,7 @@ image bitmap(char* path)
 int pixel_array(unsigned char* pixel_info, info_header* header, color* color_table,pixel** image_pixels)
 {
 	//support for upto 16 bit color
-	int bytes_per_scan_line = header->width / (BYTE_SIZE_B / header->bits_per_pixel);
-	int padding = (NIBBLE_SIZE_B - (bytes_per_scan_line % NIBBLE_SIZE_B)) * BYTE_SIZE_B/header->bits_per_pixel;
-	int end = (header->width + padding) * header->height - 1;
+	int end = (header->width + header->padding) * header->height - 1;
 
 	for (int r_pixel = 0; r_pixel < header->height; ++r_pixel)
 	{
@@ -51,7 +49,7 @@ int pixel_array(unsigned char* pixel_info, info_header* header, color* color_tab
 		for (int c_pixel = 0; c_pixel < header->width; ++c_pixel)
 		{
 			//TODO rework end of data and method of moving index backwards
-			int table_index = pixel_info[end - (header->width + padding)*(r_pixel+1) + (c_pixel+1)];
+			int table_index = pixel_info[end - (header->width + header->padding)*(r_pixel+1) + (c_pixel+1)];
 			image_pixels[r_pixel][c_pixel].r = color_table[table_index].r;
 			image_pixels[r_pixel][c_pixel].g = color_table[table_index].g;
 			image_pixels[r_pixel][c_pixel].b = color_table[table_index].b;
@@ -118,6 +116,10 @@ int bitmap_info(char* path, info_header* output)
 		fread(&output->compression, sizeof(int), 1, image_file);
 
 		output->total = output->width * output->height;
+		int bytes_per_scan_line = output->width / (BYTE_SIZE_B / output->bits_per_pixel);
+		output->padding = (NIBBLE_SIZE_B - (bytes_per_scan_line % NIBBLE_SIZE_B)) * BYTE_SIZE_B / output->bits_per_pixel;;
+		output->padded_total = output->total + output->height * output->padding;
+		output->colors = (int)powf(output->bits_per_pixel, 2);
 
 		set_info_summary(output);
 
@@ -140,9 +142,9 @@ int map_pixels(char* path, header* image_header, char* raw_buffer, info_header* 
 		ftell(image_file);
 		fseek(image_file, image_header->offset, SEEK_CUR);
 
-		float pixels_per_byte = BYTE_SIZE_B / image_info->bits_per_pixel;
+		int pixels_per_byte = BYTE_SIZE_B / image_info->bits_per_pixel;
 
-		for (int pixel = 0; pixel < image_info->total*pixels_per_byte; pixel += pixels_per_byte)
+		for (int pixel = 0; pixel < image_info->padded_total; pixel += pixels_per_byte)
 		{
 			unsigned char byte_stream_buffer = 0;
 			fread(&byte_stream_buffer, 1, 1, image_file);
@@ -199,12 +201,13 @@ void set_header_summary(header* file_header)
 	size_t offset_length = integer_digits(file_header->offset);
 
 	//set size of buffer
-	wchar_t* format = L"size:\t%d bytes\noffset:\t%d bytes\n";
-	file_header->summary = malloc(wcslen(format) + offset_length + size_length);
+	wchar_t* format = L"size:%d bytes\noffset:%d bytes\n";
+	size_t format_length = wcslen(format) + offset_length + size_length + 1;
+	file_header->summary = malloc(format_length);
 
 	//set summary
-	if(file_header->summary)
-		wsprintf(file_header->summary, format, file_header->size, file_header->offset);
+	if (file_header->summary)
+		StringCbPrintf(file_header->summary, format_length, format, file_header->size, file_header->offset);
 }
 
 void set_info_summary(info_header* file_header)
@@ -217,11 +220,15 @@ void set_info_summary(info_header* file_header)
 
 	//set size of buffer
 	wchar_t* format = L"resolution:\t%d px x %d px\nbits per channel:\t%d\ncompression type:\t%d\n";
-	file_header->summary = malloc(wcslen(format) + compression_length + width_length + height_length + colors_length);
+	size_t format_length = wcslen(format) + compression_length + width_length + height_length + colors_length;
+	file_header->summary = malloc(format_length);
 
 	//set summary
 	if (file_header->summary)
-		wsprintf(file_header->summary, format, file_header->width, file_header->height, file_header->bits_per_pixel/CHANNELS, file_header->compression);
+	{
+		StringCbPrintf(file_header->summary, format_length, format,
+			file_header->width, file_header->height, file_header->bits_per_pixel / CHANNELS, file_header->compression);
+	}
 }
 
 int integer_digits(int value)
@@ -231,4 +238,6 @@ int integer_digits(int value)
 		if ((value - (int)pow(10, index)) >= 0)
 			return index + 1;
 	}
+
+	return 0;
 }

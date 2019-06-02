@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h> 
 #include <stdlib.h>
-#include <string.h>
+#include <Strsafe.h>
 #include <windows.h>
 #include <math.h>
 #include "debug.h"
@@ -40,7 +40,7 @@ typedef struct t_color
 
 typedef struct t_info_header
 {
-	int width, height, total;
+	int width, height, total, padding, padded_total, colors;
 	short bits_per_pixel;
 	compression_type compression;
 

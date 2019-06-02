@@ -1,6 +1,2 @@
-﻿  file_reader.c
-C:\Users\Skidz\Documents\C\special-rainbow\file_reader.c(29,75): warning C4244:  'function': conversion from 'float' to 'size_t', possible loss of data
-C:\Users\Skidz\Documents\C\special-rainbow\file_reader.c(145,90): warning C4244:  '+=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Skidz\Documents\C\special-rainbow\file_reader.c(143,1): warning C4244:  'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\Skidz\Documents\C\special-rainbow\file_reader.c(143,1): warning C4244: C:\Users\Skidz\Documents\C\special-rainbow\file_reader.c(234) : warning C4715: 'integer_digits': not all control paths return a value
-  special-rainbow.vcxproj -> C:\Users\Skidz\Documents\C\special-rainbow\x64\Debug\special-rainbow.exe
+﻿  entry.c
+  special-rainbow.vcxproj -> G:\Documents\Programming\C\special-rainbow\x64\Debug\special-rainbow.exe

@@ -16,6 +16,8 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 
 	RegisterClass(&window_class);					//apply class properties
 
+	bitmap_image = bitmap("test_image_mono.bmp");
+
 	//create window
 	HWND window_handle = CreateWindowEx(			//handle for window
 		0,								//optional styles
@@ -24,7 +26,7 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 		WS_OVERLAPPEDWINDOW,			//window style
 
 		//size and coords
-		CW_USEDEFAULT, CW_USEDEFAULT, 500, 500,
+		CW_USEDEFAULT, CW_USEDEFAULT, bitmap_image.info.width+20, bitmap_image.info.height+45,
 
 		NULL,							//parent
 		NULL,							//menu
@@ -44,8 +46,6 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 
 	//message loop with OS
 	MSG message = { 0 };
-
-	bitmap_image = bitmap("test_image_small.bmp");
 
 	while (GetMessage(&message, NULL, 0, 0))
 	{
