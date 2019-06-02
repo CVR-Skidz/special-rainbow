@@ -116,8 +116,8 @@ int bitmap_info(char* path, info_header* output)
 		fread(&output->compression, sizeof(int), 1, image_file);
 
 		output->total = output->width * output->height;
-		int bytes_per_scan_line = output->width / (BYTE_SIZE_B / output->bits_per_pixel);
-		output->padding = (NIBBLE_SIZE_B - (bytes_per_scan_line % NIBBLE_SIZE_B)) * BYTE_SIZE_B / output->bits_per_pixel;;
+		float bytes_per_scan_line = (float)output->width / (BYTE_SIZE_B / output->bits_per_pixel);
+		output->padding = ((float)nibble_ceil(bytes_per_scan_line) - bytes_per_scan_line) * BYTE_SIZE_B / output->bits_per_pixel;
 		output->padded_total = output->total + output->height * output->padding;
 		output->colors = (int)powf(output->bits_per_pixel, 2);
 
@@ -156,7 +156,7 @@ int map_pixels(char* path, header* image_header, char* raw_buffer, info_header* 
 				//push wrong pixel data out of value
 				raw_buffer[color] <<= (BYTE_SIZE_B / (int)pixels_per_byte) * (color - pixel);
 				//revert original position of value
-				(unsigned char)raw_buffer[color] >>= image_info->bits_per_pixel;
+				(unsigned char)raw_buffer[color] >>= BYTE_SIZE_B - image_info->bits_per_pixel;
 			}
 		}
 	}
@@ -239,5 +239,22 @@ int integer_digits(int value)
 			return index + 1;
 	}
 
+	return 0;
+}
+
+int nibble_ceil(float bytes)
+{
+	if (bytes)
+	{
+		int ceil = NIBBLE_SIZE_B;
+
+		while (ceil <= bytes)
+		{
+			ceil += NIBBLE_SIZE_B;
+		}
+
+		return ceil;
+	}
+	
 	return 0;
 }

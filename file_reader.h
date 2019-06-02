@@ -76,3 +76,4 @@ int map_color_table(char* path, color* table, info_header* image_info);
 void set_header_summary(header* file_header);
 void set_info_summary(info_header* file_header);
 int integer_digits(int value);
+int nibble_ceil(float bytes);
