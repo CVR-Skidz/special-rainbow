@@ -119,7 +119,7 @@ int bitmap_info(char* path, info_header* output)
 		float bytes_per_scan_line = (float)output->width / (BYTE_SIZE_B / output->bits_per_pixel);
 		output->padding = ((float)nibble_ceil(bytes_per_scan_line) - bytes_per_scan_line) * BYTE_SIZE_B / output->bits_per_pixel;
 		output->padded_total = output->total + output->height * output->padding;
-		output->colors = (int)powf(output->bits_per_pixel, 2);
+		output->colors = (int)powf(2, output->bits_per_pixel);
 
 		set_info_summary(output);
 
@@ -179,7 +179,7 @@ int map_color_table(char* path, color* table, info_header* image_info)
 		ftell(image_file);
 		fseek(image_file, 54, SEEK_CUR);
 
-		for (int color = 0; color < (int)powf(image_info->bits_per_pixel, 2); ++color)
+		for (int color = 0; color < image_info->colors; ++color)
 		{
 			fread(&table[color].b, 1, 1, image_file);
 			fread(&table[color].g, 1, 1, image_file);
@@ -246,9 +246,9 @@ int nibble_ceil(float bytes)
 {
 	if (bytes)
 	{
-		int ceil = NIBBLE_SIZE_B;
+		int ceil = 0;
 
-		while (ceil <= bytes)
+		while (ceil < bytes)
 		{
 			ceil += NIBBLE_SIZE_B;
 		}
