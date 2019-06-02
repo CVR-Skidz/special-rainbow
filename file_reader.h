@@ -70,6 +70,7 @@ int pixel_array(unsigned char* pixel_info, info_header* header, color* color_tab
 int bitmap_header(char* path, header* output);
 int bitmap_info(char* path, info_header* output);
 int map_pixels(char* path, header* image_header, char* raw_data, info_header* image_info);
+image map_pixels_24(char* path, info_header* image_info);
 int map_color_table(char* path, color* table, info_header* image_info);
 
 //data formatting functions

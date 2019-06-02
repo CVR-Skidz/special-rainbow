@@ -24,16 +24,27 @@ image bitmap(char* path)
 
 		return (image) { 0, 0, READ_PATH_ERROR };
 	}
-		
-	unsigned char* pixel_info = malloc(image_info.padded_total);
+	
+	//handle 24 bit color
+	if (image_info.bits_per_pixel == 24)
+	{
+
+	}
+
+	//read color pallete
 	color* color_table = malloc((size_t)image_info.colors * CHANNELS);
+	map_color_table(path, color_table, &image_info);
+
+	//read in color_indexes of pixels
+	unsigned char* pixel_info = malloc(image_info.padded_total);
+	map_pixels(path, &image_header, pixel_info, &image_info);
 
 	//pixels of image
 	pixel** image_pixels = malloc(image_info.total * sizeof(pixel));
-
-	map_color_table(path, color_table, &image_info);
-	map_pixels(path, &image_header, pixel_info, &image_info);
 	pixel_array(pixel_info, &image_info, color_table, image_pixels);
+
+	free(pixel_info);
+	pixel_info = 0;
 
 	return (image) { image_header, image_info, NOERR, image_pixels, color_table};
 }
@@ -116,7 +127,7 @@ int bitmap_info(char* path, info_header* output)
 		fread(&output->compression, sizeof(int), 1, image_file);
 
 		output->total = output->width * output->height;
-		float bytes_per_scan_line = (float)output->width / (BYTE_SIZE_B / output->bits_per_pixel);
+		float bytes_per_scan_line = output->width / ((float)BYTE_SIZE_B / output->bits_per_pixel);
 		output->padding = ((float)nibble_ceil(bytes_per_scan_line) - bytes_per_scan_line) * BYTE_SIZE_B / output->bits_per_pixel;
 		output->padded_total = output->total + output->height * output->padding;
 		output->colors = (int)powf(2, output->bits_per_pixel);
@@ -147,7 +158,7 @@ int map_pixels(char* path, header* image_header, char* raw_buffer, info_header* 
 		for (int pixel = 0; pixel < image_info->padded_total; pixel += pixels_per_byte)
 		{
 			unsigned char byte_stream_buffer = 0;
-			fread(&byte_stream_buffer, 1, 1, image_file);
+			fread(&byte_stream_buffer, ceilf((float)1/pixels_per_byte), 1, image_file);
 
 			for (int color = pixel; color < pixels_per_byte + pixel; ++color)
 			{
@@ -164,6 +175,35 @@ int map_pixels(char* path, header* image_header, char* raw_buffer, info_header* 
 	fclose(image_file);
 
 	return 1;
+}
+
+image map_pixels_24(char* path, info_header* image_info)
+{
+	FILE* image_file;
+	
+	if (fopen_s(&image_file, path, "rb"))
+		return (image) { 0, 0, READ_PATH_ERROR, 0, 0 };
+
+	pixel** image_pixels = malloc(image_info->height * sizeof(pixel*));
+
+	for (int r_pixel = 0; r_pixel < image_info->padded_total; ++r_pixel)
+	{
+		image_pixels[r_pixel] = malloc(image_info->width*sizeof(pixel));
+
+		for (int c_pixel = 0; c_pixel < image_info->width; ++c_pixel)
+		{
+			fread(&image_pixels[r_pixel][c_pixel].r, 1, 1,image_file);
+			fread(&image_pixels[r_pixel][c_pixel].g, 1, 1,image_file);
+			fread(&image_pixels[r_pixel][c_pixel].b, 1, 1,image_file);
+			image_pixels[r_pixel][c_pixel].a = 1;
+			image_pixels[r_pixel][c_pixel].x = c_pixel + 1;
+			image_pixels[r_pixel][c_pixel].y = r_pixel + 1;
+		}
+
+		//TODO seek until end of padding
+	}
+
+	//TODO return image
 }
 
 int map_color_table(char* path, color* table, info_header* image_info)
@@ -190,7 +230,6 @@ int map_color_table(char* path, color* table, info_header* image_info)
 		fclose(image_file);
 	}
 	
-
 	return 1;
 }
 
