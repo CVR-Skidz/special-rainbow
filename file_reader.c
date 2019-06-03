@@ -1,4 +1,4 @@
-#include "file_reader.h"
+#include "bm_reader.h"
 
 image bitmap(char* path)
 {
@@ -24,11 +24,10 @@ image bitmap(char* path)
 
 		return (image) { 0, 0, READ_PATH_ERROR };
 	}
-	
-	//handle 24 bit color
+
 	if (image_info.bits_per_pixel == 24)
 	{
-
+		return map_pixels_24(path, &image_info, &image_header);
 	}
 
 	//read color pallete
@@ -177,33 +176,39 @@ int map_pixels(char* path, header* image_header, char* raw_buffer, info_header* 
 	return 1;
 }
 
-image map_pixels_24(char* path, info_header* image_info)
+image map_pixels_24(char* path, info_header* image_info, header* image_header)
 {
 	FILE* image_file;
 	
 	if (fopen_s(&image_file, path, "rb"))
 		return (image) { 0, 0, READ_PATH_ERROR, 0, 0 };
 
-	pixel** image_pixels = malloc(image_info->height * sizeof(pixel*));
+	pixel** image_pixels = malloc(image_info->total * sizeof(pixel));
 
-	for (int r_pixel = 0; r_pixel < image_info->padded_total; ++r_pixel)
+	ftell(image_file);
+	fseek(image_file, image_header->offset, SEEK_CUR);
+
+	for (int r_pixel = image_info->height - 1; r_pixel >= 0; --r_pixel)
 	{
-		image_pixels[r_pixel] = malloc(image_info->width*sizeof(pixel));
+		image_pixels[r_pixel] = malloc(image_info->width * sizeof(pixel));
 
 		for (int c_pixel = 0; c_pixel < image_info->width; ++c_pixel)
 		{
-			fread(&image_pixels[r_pixel][c_pixel].r, 1, 1,image_file);
-			fread(&image_pixels[r_pixel][c_pixel].g, 1, 1,image_file);
+			ZeroMemory(&image_pixels[r_pixel][c_pixel], sizeof(pixel));
+
 			fread(&image_pixels[r_pixel][c_pixel].b, 1, 1,image_file);
+			fread(&image_pixels[r_pixel][c_pixel].g, 1, 1,image_file);
+			fread(&image_pixels[r_pixel][c_pixel].r, 1, 1,image_file);
 			image_pixels[r_pixel][c_pixel].a = 1;
 			image_pixels[r_pixel][c_pixel].x = c_pixel + 1;
 			image_pixels[r_pixel][c_pixel].y = r_pixel + 1;
 		}
 
-		//TODO seek until end of padding
+		ftell(image_file);
+		fseek(image_file, image_info->padding / BYTE_SIZE_B, SEEK_CUR);
 	}
 
-	//TODO return image
+	return (image) { *image_header, * image_info, NOERR, image_pixels, 0 };
 }
 
 int map_color_table(char* path, color* table, info_header* image_info)

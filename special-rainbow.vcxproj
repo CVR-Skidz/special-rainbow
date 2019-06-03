@@ -144,13 +144,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="debug.c" />
-    <ClCompile Include="file_reader.c" />
+    <ClCompile Include="bm_reader.c" />
     <ClCompile Include="entry.c" />
+    <ClCompile Include="rl_decoder.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h" />
     <ClInclude Include="entry.h" />
-    <ClInclude Include="file_reader.h" />
+    <ClInclude Include="bm_reader.h" />
+    <ClInclude Include="rl_decoder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
