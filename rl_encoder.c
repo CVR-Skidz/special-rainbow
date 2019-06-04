@@ -44,19 +44,6 @@ int encode_pixels(image bitmap, rl_packet* output)
 	return packet_count;
 }
 
-unsigned char color_index(pixel pixel, color* colors, int count)
-{
-	for (unsigned char color = 0; color < count; ++color)
-	{
-		if (pixel.r == colors[color].r && pixel.g == colors[color].g && pixel.b == colors[color].b)
-		{
-			return color;
-		}
-	}
-
-	return 0;
-}
-
 unsigned char pack_channels_8(pixel pixel)
 {
 	unsigned char packed_color = 0;

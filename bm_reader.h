@@ -78,3 +78,4 @@ void set_header_summary(header* file_header);
 void set_info_summary(info_header* file_header);
 int integer_digits(int value);
 int nibble_ceil(float bytes);
+unsigned char color_index(pixel pixel, color* colors, int count);

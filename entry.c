@@ -16,7 +16,10 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 
 	RegisterClass(&window_class);					//apply class properties
 
-	bitmap_image = bitmap("test_image_8.bmp");
+	bitmap_image = bitmap("test_image_copy.bmp");
+	
+	//if (!write_bitmap(bitmap_image, "test_image_copy.bmp"))
+		//return 1;
 
 	//create window
 	HWND window_handle = CreateWindowEx(			//handle for window
@@ -35,7 +38,7 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 	);
 
 	if (!window_handle)
-		return 0;
+		return 1;
 
 	ShowWindow(window_handle, display_flag);
 

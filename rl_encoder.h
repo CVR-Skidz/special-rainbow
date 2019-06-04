@@ -1,6 +1,5 @@
 #pragma once
 #include "rl_decoder.h"
-#include <stdio.h>
 
 typedef struct t_rl_image
 {
@@ -14,5 +13,4 @@ typedef struct t_rl_image
 
 rl_image rl_bitmap(image* bitmap);
 int encode_pixels(image bitmap, rl_packet* output);
-unsigned char color_index(pixel pixel, color* colors, int count);
 unsigned char pack_channels_8(pixel pixel);

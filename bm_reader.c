@@ -302,3 +302,16 @@ int nibble_ceil(float bytes)
 	
 	return 0;
 }
+
+unsigned char color_index(pixel pixel, color* colors, int count)
+{
+	for (unsigned char color = 0; color < count; ++color)
+	{
+		if (pixel.r == colors[color].r && pixel.g == colors[color].g && pixel.b == colors[color].b)
+		{
+			return color;
+		}
+	}
+
+	return 0;
+}
