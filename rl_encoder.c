@@ -1,10 +1,18 @@
 #include "rl_encoder.h"
 
-rl_packet* encode_pixels(image bitmap)
+rl_image rl_bitmap(image* bitmap)
+{
+	rl_packet* run_packets = 0;
+	int packets = encode_pixels(*bitmap, run_packets);
+
+	return (rl_image) { bitmap->header, bitmap->info, EIGHT_BIT_RLE, bitmap->color_table, run_packets, packets};
+}
+
+int encode_pixels(image bitmap, rl_packet* output)
 {
 	pixel** pixels = bitmap.pixels;
 
-	rl_packet* packets = malloc(sizeof(rl_packet));
+	output = malloc(sizeof(rl_packet));
 
 	//run data
 	int packet_count = 0;
@@ -29,11 +37,11 @@ rl_packet* encode_pixels(image bitmap)
 			} while (++c_pixel < bitmap.info.width && color_index( pixels[r_pixel][c_pixel], bitmap.color_table, bitmap.info.colors) == run);
 		}
 		
-		packets[packet_count++] = (rl_packet){ run_count, run };
-		packets = realloc(packets, (packet_count + 1) * sizeof(rl_packet));
+		output[packet_count++] = (rl_packet){ run_count, run };
+		output = realloc(output, (packet_count + 1) * sizeof(rl_packet));
 	}
 
-	return packets;
+	return packet_count;
 }
 
 unsigned char color_index(pixel pixel, color* colors, int count)

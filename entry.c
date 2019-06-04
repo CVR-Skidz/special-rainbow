@@ -17,7 +17,6 @@ int WINAPI wWinMain(HINSTANCE h_instance, HINSTANCE p_instance, wchar_t* argumen
 	RegisterClass(&window_class);					//apply class properties
 
 	bitmap_image = bitmap("test_image_8.bmp");
-	encode_pixels(bitmap_image);
 
 	//create window
 	HWND window_handle = CreateWindowEx(			//handle for window
