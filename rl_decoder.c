@@ -1,6 +1,6 @@
 #include "rl_decoder.h"
 
-rl_packet* map_packet(char* path, header* image_header, info_header* image_info)
+rl_packet* map_packets(char* path, header* image_header, info_header* image_info)
 {
 	FILE* image_file;
 

@@ -143,16 +143,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bm_writer.c" />
     <ClCompile Include="debug.c" />
     <ClCompile Include="bm_reader.c" />
     <ClCompile Include="entry.c" />
     <ClCompile Include="rl_decoder.c" />
+    <ClCompile Include="rl_encoder.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bm_writer.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="entry.h" />
     <ClInclude Include="bm_reader.h" />
     <ClInclude Include="rl_decoder.h" />
+    <ClInclude Include="rl_encoder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

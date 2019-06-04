@@ -1,4 +1,2 @@
-﻿  file_reader.c
-G:\Documents\Programming\c\special-rainbow\file_reader.c(130,123): warning C4244:  '=': conversion from 'float' to 'int', possible loss of data
-G:\Documents\Programming\c\special-rainbow\file_reader.c(160,62): warning C4244:  'function': conversion from 'float' to 'size_t', possible loss of data
+﻿  bm_writer.c
   special-rainbow.vcxproj -> G:\Documents\Programming\C\special-rainbow\x64\Debug\special-rainbow.exe

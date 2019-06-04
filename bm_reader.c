@@ -1,4 +1,4 @@
-#include "file_reader.h"
+#include "bm_reader.h"
 
 image bitmap(char* path)
 {
@@ -90,7 +90,7 @@ int bitmap_header(char* path, header* output)
 		FILE_OFFSET_32(image_file);
 		fread(&output->offset, sizeof(int), 1, image_file);
 
-		set_header_summary(output);
+		//set_header_summary(output);
 
 		fclose(image_file);
 	}
@@ -131,7 +131,7 @@ int bitmap_info(char* path, info_header* output)
 		output->padded_total = output->total + output->height * output->padding;
 		output->colors = (int)powf(2, output->bits_per_pixel);
 
-		set_info_summary(output);
+		//set_info_summary(output);
 
 		fclose(image_file);
 	}
