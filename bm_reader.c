@@ -7,21 +7,11 @@ image bitmap(char* path)
 
 	if (!bitmap_header(path, &image_header))
 	{
-		#ifdef DEBUG
-		debug.set_output(&debug, L"Error Opening File\n");
-		debug_log(debug);
-		#endif
-
 		return (image) { 0, 0, READ_PATH_ERROR };
 	}
 		
 	if (!bitmap_info(path, &image_info))
 	{
-		#ifdef DEBUG
-		debug.set_output(&debug, L"Error Opening File\n");
-		debug_log(debug);
-		#endif
-
 		return (image) { 0, 0, READ_PATH_ERROR };
 	}
 
@@ -314,4 +304,16 @@ unsigned char color_index(pixel pixel, color* colors, int count)
 	}
 
 	return 0;
+}
+
+void draw_image(HDC device_context, image* bitmap)
+{
+	for (int r_pixel = 0; r_pixel < bitmap->info.height; ++r_pixel)
+	{
+		for (int c_pixel = 0; c_pixel < bitmap->info.width; ++c_pixel)
+		{
+			pixel curr_pixel = bitmap->pixels[r_pixel][c_pixel];
+			SetPixel(device_context, curr_pixel.x, curr_pixel.y, RGB(curr_pixel.r, curr_pixel.g, curr_pixel.b));
+		}
+	}
 }

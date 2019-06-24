@@ -5,7 +5,6 @@
 #include <Strsafe.h>
 #include <windows.h>
 #include <math.h>
-#include "debug.h"
 #define FILE_OFFSET_16(stream) {ftell(stream); fseek(stream, 2, SEEK_CUR);}
 #define FILE_OFFSET_32(stream) {ftell(stream); fseek(stream, 4, SEEK_CUR);}
 #define CHANNELS 4
@@ -79,3 +78,6 @@ void set_info_summary(info_header* file_header);
 int integer_digits(int value);
 int nibble_ceil(float bytes);
 unsigned char color_index(pixel pixel, color* colors, int count);
+
+//display
+void draw_image(HDC device_context, image* bitmap);
