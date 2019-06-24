@@ -1,2 +1,9 @@
 # Special Rainbow
-Special Rainbow is an image reader that extracts color and picture information from image files. Made using the C language standard runtime libraries and Windows SDK for the Microsoft Windows platform.
+
+A Windows platform library to read Bitmap images into C structures
+
+Special Rainbow is a library made for the windows platform that reads in bitmap images into structs for the C language.
+It was created to learn about reading binary data and provide a very simple altenrative to the native Windows functions.
+
+The source code is split over four files - two headers and two c files. rl_decoder for decoding run length encoded images
+and bm_reader for reading in image data.
