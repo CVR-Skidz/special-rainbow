@@ -1,5 +1,5 @@
 ﻿  bm_reader.c
-C:\Users\Skidz\Documents\C\special-rainbow\bm_reader.c(120,123): warning C4244:  '=': conversion from 'float' to 'int', possible loss of data
+G:\Documents\Programming\C\special-rainbow\bm_reader.c(117,42): warning C4244:  '=': conversion from 'float' to 'int', possible loss of data
   rl_decoder.c
-C:\Users\Skidz\Documents\C\special-rainbow\bm_reader.c(150,62): warning C4244:  'function': conversion from 'float' to 'size_t', possible loss of data
-  special-rainbow.vcxproj -> C:\Users\Skidz\Documents\C\special-rainbow\x64\Release\special-rainbow.lib
+G:\Documents\Programming\C\special-rainbow\bm_reader.c(148,62): warning C4244:  'function': conversion from 'float' to 'size_t', possible loss of data
+  special-rainbow.vcxproj -> G:\Documents\Programming\C\special-rainbow\x64\Release\special-rainbow.lib
