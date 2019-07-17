@@ -6,29 +6,13 @@ image bitmap(char* path)
 	info_header image_info;
 
 	if (!bitmap_header(path, &image_header))
-	{
-		#ifdef DEBUG
-		debug.set_output(&debug, L"Error Opening File\n");
-		debug_log(debug);
-		#endif
-
 		return (image) { 0, 0, READ_PATH_ERROR };
-	}
 		
 	if (!bitmap_info(path, &image_info))
-	{
-		#ifdef DEBUG
-		debug.set_output(&debug, L"Error Opening File\n");
-		debug_log(debug);
-		#endif
-
 		return (image) { 0, 0, READ_PATH_ERROR };
-	}
 
 	if (image_info.bits_per_pixel == 24)
-	{
 		return map_pixels_24(path, &image_info, &image_header);
-	}
 
 	//read color pallete
 	color* color_table = malloc((size_t)image_info.colors * CHANNELS);
@@ -58,8 +42,8 @@ int pixel_array(unsigned char* pixel_info, info_header* header, color* color_tab
 		image_pixels[r_pixel] = malloc(sizeof(pixel)*header->width);
 		for (int c_pixel = 0; c_pixel < header->width; ++c_pixel)
 		{
-			//TODO rework end of data and method of moving index backwards
 			int table_index = pixel_info[end - (header->width + header->padding)*(r_pixel+1) + (c_pixel+1)];
+
 			image_pixels[r_pixel][c_pixel].r = color_table[table_index].r;
 			image_pixels[r_pixel][c_pixel].g = color_table[table_index].g;
 			image_pixels[r_pixel][c_pixel].b = color_table[table_index].b;
@@ -125,9 +109,13 @@ int bitmap_info(char* path, info_header* output)
 		fread(&output->bits_per_pixel, sizeof(short), 1, image_file);
 		fread(&output->compression, sizeof(int), 1, image_file);
 
-		output->total = output->width * output->height;
 		float bytes_per_scan_line = output->width / ((float)BYTE_SIZE_B / output->bits_per_pixel);
-		output->padding = ((float)nibble_ceil(bytes_per_scan_line) - bytes_per_scan_line) * BYTE_SIZE_B / output->bits_per_pixel;
+
+		output->total = output->width * output->height;
+
+		output->padding = ((float)nibble_ceil(bytes_per_scan_line) - bytes_per_scan_line) 
+			* BYTE_SIZE_B / output->bits_per_pixel;
+		
 		output->padded_total = output->total + output->height * output->padding;
 		output->colors = (int)powf(2, output->bits_per_pixel);
 
@@ -251,7 +239,8 @@ void set_header_summary(header* file_header)
 
 	//set summary
 	if (file_header->summary)
-		StringCbPrintf(file_header->summary, format_length, format, file_header->size, file_header->offset);
+		StringCbPrintf(file_header->summary, format_length, format,
+			file_header->size, file_header->offset);
 }
 
 void set_info_summary(info_header* file_header)
@@ -264,14 +253,18 @@ void set_info_summary(info_header* file_header)
 
 	//set size of buffer
 	wchar_t* format = L"resolution:\t%d px x %d px\nbits per channel:\t%d\ncompression type:\t%d\n";
-	size_t format_length = wcslen(format) + compression_length + width_length + height_length + colors_length;
+
+	size_t format_length = wcslen(format) + compression_length + 
+		width_length + height_length + colors_length;
+
 	file_header->summary = malloc(format_length);
 
 	//set summary
 	if (file_header->summary)
 	{
 		StringCbPrintf(file_header->summary, format_length, format,
-			file_header->width, file_header->height, file_header->bits_per_pixel / CHANNELS, file_header->compression);
+			file_header->width, file_header->height, 
+			file_header->bits_per_pixel / CHANNELS, file_header->compression);
 	}
 }
 
@@ -293,9 +286,7 @@ int nibble_ceil(float bytes)
 		int ceil = 0;
 
 		while (ceil < bytes)
-		{
 			ceil += NIBBLE_SIZE_B;
-		}
 
 		return ceil;
 	}
@@ -308,10 +299,20 @@ unsigned char color_index(pixel pixel, color* colors, int count)
 	for (unsigned char color = 0; color < count; ++color)
 	{
 		if (pixel.r == colors[color].r && pixel.g == colors[color].g && pixel.b == colors[color].b)
-		{
 			return color;
-		}
 	}
 
 	return 0;
+}
+
+void draw_image(HDC device_context, image* bitmap)
+{
+	for (int r_pixel = 0; r_pixel < bitmap->info.height; ++r_pixel)
+	{
+		for (int c_pixel = 0; c_pixel < bitmap->info.width; ++c_pixel)
+		{
+			pixel curr_pixel = bitmap->pixels[r_pixel][c_pixel];
+			SetPixel(device_context, curr_pixel.x, curr_pixel.y, RGB(curr_pixel.r, curr_pixel.g, curr_pixel.b));
+		}
+	}
 }

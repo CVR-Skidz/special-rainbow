@@ -1,2 +1,7 @@
-﻿  entry.c
-  special-rainbow.vcxproj -> C:\Users\Skidz\Documents\C\special-rainbow\x64\Debug\special-rainbow.exe
+﻿  bm_reader.c
+G:\Documents\Programming\C\special-rainbow\bm_reader.c(117,42): warning C4244:  '=': conversion from 'float' to 'int', possible loss of data
+  rl_decoder.c
+  Generating Code...
+G:\Documents\Programming\C\special-rainbow\bm_reader.c(148,62): warning C4244:  'function': conversion from 'float' to 'size_t', possible loss of data
+G:\Documents\Programming\C\special-rainbow\bm_reader.c(148,62): warning C4244: G:\Documents\Programming\C\special-rainbow\rl_decoder.c(33) : warning C4715: 'map_packets': not all control paths return a value
+  special-rainbow.vcxproj -> G:\Documents\Programming\C\special-rainbow\x64\Debug\special-rainbow.lib

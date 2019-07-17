@@ -15,42 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="entry.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="debug.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="bm_reader.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="rl_decoder.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rl_encoder.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bm_writer.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="entry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="bm_reader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="rl_decoder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="rl_encoder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bm_writer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
