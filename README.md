@@ -9,4 +9,4 @@ The source code is split over four files - two headers and two c files. rl_decod
 # Install
 To use the `rainbow.lib` in your projects add the library to the external references in your solution explorer (you can drag and drop if preffered) and then include the header files in your source, make sure the header files are either specified in your linker settings or in working directory. 
 
-If you perfer control over the library location I recommend placing the `include` and `lib directories` in the root of your project directory and link the library at the beggining of your source file with ```#pragma comment(lib"lib/rainbow")```
+If you perfer control over the library location I recommend placing the `include` and `lib directories` in the root of your project directory and link the library at the beggining of your source file with ```#pragma comment(lib,"lib/rainbow")```
