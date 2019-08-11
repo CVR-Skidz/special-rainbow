@@ -20,4 +20,4 @@ To draw the image you should use the following in your paint context:
 `draw_image(HDC context, image* image)`
 
 # Authors
-Callum Van Rooyen [CVR-Skidz](https://github.com/CVR-Skidz/special-rainbow/tree/master/example_outputs/lena_512.png)
+Callum Van Rooyen [CVR-Skidz](https://github.com/CVR-Skidz/special-rainbow/tree/master/example_outputs/lena512.png)
