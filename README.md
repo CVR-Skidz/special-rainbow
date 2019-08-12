@@ -1,7 +1,7 @@
 # Special Rainbow
 Special rainbow is a static library for reading Bitmap image data for C/C++. A homebrew alternative to the some of the Windows SDK functions. Anything can be done with the data, <shameless plug> you could use the library to draw the image on screen even! </shameless plug>
 
-<img src = "https://github.com/CVR-Skidz/special-rainbow/blob/master/example_outputs/lena512.png" alt = "Example Use" max-width = "50%">
+<img src = "https://github.com/CVR-Skidz/special-rainbow/blob/master/example_outputs/lena512.png" alt = "Example Use" max-width = "250px">
 
 # Installstion
 Download the latest release and add it to your external refernces.
