@@ -6,7 +6,7 @@ Special rainbow is a static library for reading Bitmap image data for C/C++. A h
 </p>
 
 # Installstion
-Download the latest release and add it to your external refernces.
+Download the latest release and add it to your external references.
 
 ## Visual Studio
 
